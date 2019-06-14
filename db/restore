@@ -1,0 +1,32 @@
+#!/bin/bash
+#mysqldump -uroot -p realestate < data/realestate_`date '+%Y-%m-%d'`.sql
+
+j=0;
+file_list=($(ls data))
+
+echo "================================================="
+echo "                DB file dump list                "
+echo "================================================="
+
+for file in ${file_list[*]}; do
+	j=$((j+1))
+	echo $j. $file
+done
+
+echo ""
+echo "================================================="
+echo "         Enter the number want to DB load        "
+echo "   If you want to stop this process 'CTRL + C'   "
+echo "================================================="
+
+echo -n "choice the number : "
+read input;
+
+if [ $input -le 0 ]; then
+	echo "not selected below the index";
+elif [ $input -gt ${#file_list[@]} ]; then
+	echo "not selected over the index";
+else 
+	echo "mysqldump -uroot -p realestate < ${file_list[$((input-1))]}"
+	mysqldump -uroot -p realestate < data/${file_list[$((input-1))]}
+fi

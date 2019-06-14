@@ -1,0 +1,101 @@
+
+var express = require('express');
+var multer = require('multer');
+var router = express.Router();
+
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname) // cb 콜백함수를 통해 전송된 파일 이름 설정
+  }
+})
+
+var upload = multer({ storage:storage })
+
+
+/**
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var MySQLStore = require('express-mysql-session')(session);
+var mysql = require('mysql');
+
+var conn = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'lljh0802@W',
+  database : 'realestate'
+});
+
+conn.connect();
+ */
+//router.use(bodyParser.json());
+
+
+
+router.get('/', function (req, res) {
+  console.log('images get no id call!!');
+  res.send('images get no id call!!');
+});
+
+router.get('/:id', function (req, res) {
+  console.log('images get call!!');
+  res.send('images get call!!');
+});
+
+
+router.put('/:id', function (req, res) {
+  console.log('image put call!!');
+  res.send('image put call!!');
+
+});
+
+/******************************************
+ * delete specific image file
+ ******************************************/
+router.delete('/:id', function (req, res) {
+  console.log('image delete call!!');
+  res.send('image delete call!!');
+
+});
+
+
+router.post('/:id', upload.single('file'), function (req, res) {
+  console.log('images post call!! id');
+
+  res.send('Uploaded! : '+req.file); // object를 리턴함
+  console.log(req.file); // 콘솔(터미널)을 통해서 req.file Object 내용 확인 가능.
+
+/**
+  upload(req, res).then(function (file) {
+    res.json(file);
+  }, function (err) {
+    res.send(500, err);
+  });
+ */
+
+
+  /*
+
+  var user = req.body.image;
+  var sql = 'INSERT INTO images (id, filename, date, auth, owner ) VALUES (?,?,?,?,?)';
+
+  conn.query(sql,
+         [image.id, image.filename, image.date, image.auth, image.owner],
+         function(err, results){
+  if(err){
+    console.log('err: ' + err);
+    //console.log(err);
+    res.send(err);
+    res.status(500).send('Internal Server Error');
+  } else {
+    //  res.render('view', {topics:topics, topic:topic[0]});
+    res.send(results);
+    console.log(results);
+  }
+  });
+  */
+});
+module.exports = router;

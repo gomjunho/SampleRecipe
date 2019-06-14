@@ -1,0 +1,227 @@
+========================== ImageUploadTest.vue =========================
+
+<template>
+<div>
+  <h1>Image Upload Examples Page</h1>
+
+  <input type="file" @change="onFileChanged">
+  <button @click="onUpload">Upload!</button>
+
+  <br>
+  <button @click="imageGet">imageGet</button>
+  <button @click="imagePost">imagePost</button>
+  <button @click="imagePut">imagePut</button>
+  <button @click="imageDelete">imageDelete</button>
+
+
+  </div>
+
+<!--UPLOAD-->
+<!--
+<div class="container">
+
+  <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
+    <h1>Upload images</h1>
+    <div class="dropbox">
+      <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file">
+        <p v-if="isInitial">
+          Drag your file(s) here to begin<br> or click to browse
+        </p>
+        <p v-if="isSaving">
+          Uploading {{ fileCount }} files...
+        </p>
+    </div>
+  </form>
+</div>
+-->
+<!--
+  <input > type="file" </input>
+    <input type="file" change="onFileChanged">
+    <button click="onUpload">Upload!</button>
+-->
+</template>
+
+<script>
+import axios from 'axios';
+
+  export default {
+data() {
+  return {
+    selectedFile: null
+  }
+},
+methods: {
+  onFileChanged (event) {
+    this.selectedFile = event.target.files[0];
+    console.log(this.selectedFile);
+// console.log('this.selectedFile: '+this.selectedFile);
+// console.log('event.target.files[0]'+event.target.files[0]);
+/*
+    0:File(69649) {name: "estate.jpg", lastModified: 1532261412323, lastModifiedDate: Sun Jul 22 2018 21:10:12 GMT+0900 (한국 표준시), webkitRelativePath: "", size: 69649, …}
+    length:1
+*/
+
+  },
+  onUpload() {
+    const formData = new FormData();
+    console.log(this.selectedFile);
+    //console.log("this.selectedFile.name: " + this.selectedFile.name);
+
+if(this.selectedFile !== null){
+    formData.append('myFile', this.selectedFile, this.selectedFile.name);
+    // upload file, get it from this.selectedFile
+    var id = 1;
+    axios.post('/api/images/'+id, formData, {
+        onUploadProgress: uploadEvent => {
+          console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEventEvent.total * 100) + '%')
+        }
+    })
+    .then(res => {
+      console.log (res);
+    });
+    /*
+      var id = 1;
+      this.$http.post(`/api/images/${id}`,
+        { thisfile: this.selectedFile.name }
+      //  , {user: user}
+      )
+
+      .then((response) => {
+        //this.apires = response;
+//        console.log("response: " + response);
+      })*/
+  //          console.log('post test');
+} else {
+  alert('please select file')
+}
+  },
+  imageGet(){
+    //id for test
+    var id = 1;
+    this.$http.get(`/api/images/${id}`
+    //  , {user: user}
+    )
+    .then((response) => {
+      this.apires = response;
+//          console.log("response: "+response);
+    })
+  },
+  imagePost(){
+    //id for test
+    var id = 1;
+    this.$http.post(`/api/images/${id}`
+    //  , {user: user}
+    )
+    .then((response) => {
+      this.apires = response;
+//          console.log("response: "+response);
+    })
+  },
+  imagePut(){
+    //id for test
+    var id = 1;
+    this.$http.put(`/api/images/${id}`
+    //  , {user: user}
+    )
+    .then((response) => {
+      this.apires = response;
+//          console.log("response: "+response);
+    })
+  },
+  imageDelete(){
+    //id for test
+    var id = 1;
+    this.$http.delete(`/api/images/${id}`
+    //  , {user: user}
+    )
+    .then((response) => {
+      this.apires = response;
+//          console.log("response: "+response);
+    })
+  }
+
+
+}
+}
+</script>
+
+========================== ImageUploadTest.vue =========================
+
+============================== Images.js ===============================
+
+
+
+var express = require('express');
+var router = express.Router();
+
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var MySQLStore = require('express-mysql-session')(session);
+var mysql = require('mysql');
+
+var conn = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'lljh0802@W',
+  database : 'realestate'
+});
+
+conn.connect();
+
+router.use(bodyParser.json());
+
+router.get('/', function (req, res) {
+  console.log('images get no id call!!');
+  res.send('images get no id call!!');
+});
+
+router.get('/:id', function (req, res) {
+  console.log('images get call!!');
+  res.send('images get call!!');
+});
+
+router.post('/:id', function (req, res) {
+  console.log('images post call!!');
+  res.send(req.body);
+  console.log(req.body);
+
+  /*
+
+  var user = req.body.image;
+  var sql = 'INSERT INTO images (id, filename, date, auth, owner ) VALUES (?,?,?,?,?)';
+
+  conn.query(sql,
+         [image.id, image.filename, image.date, image.auth, image.owner],
+         function(err, results){
+  if(err){
+    console.log('err: ' + err);
+    //console.log(err);
+    res.send(err);
+    res.status(500).send('Internal Server Error');
+  } else {
+    //  res.render('view', {topics:topics, topic:topic[0]});
+    res.send(results);
+    console.log(results);
+  }
+  });
+  */
+});
+
+router.put('/:id', function (req, res) {
+  console.log('image put call!!');
+  res.send('image put call!!');
+
+});
+
+router.delete('/:id', function (req, res) {
+  console.log('image delete call!!');
+  res.send('image delete call!!');
+
+});
+
+module.exports = router;
+
+
+============================== Images.js ===============================
+
+============================== css file ================================
