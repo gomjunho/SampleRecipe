@@ -199,48 +199,37 @@ router.get('/session', function(req,res){
 })
 
 
-router.post('/register', function(req,res){
-    var newUser = {
-        authId : 'local:'+req.body.user.authId,
-        username : req.body.user.username,
-        password : req.body.user.password,
-        displayName : req.body.user.displayName,
-        email : req.body.user.email
-    }
-    // console.log('register req.body', req.body);
-    hasher({password: newUser.password}, function(err, pass, salt, hash){
-        var sql = 'INSERT INTO users (authId, username, password, salt, displayName, email) values (?,?,?,?,?,?)'
-        conn.query(sql, [newUser.authId, newUser.username, hash, salt, newUser.displayName, newUser.email], function(err, results){
-            if(err){
-                if(err.errno === 1062){
-                    res.send({code:1, msg:'alreay exist'});
-                } else {
-                    console.log(err);
-                    res.status(500).send('Internal Server Error');
-                }
-            } else {
-                console.log(results);
-                req.login(newUser, function(err) {
-                    if (err) {
-                        return next(err); 
-                    } else {
-                        res.send({code:0, msg:'succ', result:results});
-                    }
-                });
-                // res.send({code:0, msg:'succ', result:results});
-/**
-                req.login(req.body.user, function(err) {
-                    if (err) {
-                        return next(err); 
-                    } else {
-                        res.send({code:0, msg:'succ'});
-                    }
-                  });
-                   */
-            }
-        })
-    })
-})
+// router.post('/register', function(req,res){
+//     var newUser = {
+//         authId : 'local:'+req.body.user.authId,
+//         username : req.body.user.username,
+//         password : req.body.user.password,
+//         displayName : req.body.user.displayName,
+//         email : req.body.user.email
+//     }
+//     hasher({password: newUser.password}, function(err, pass, salt, hash){
+//         var sql = 'INSERT INTO users (authId, username, password, salt, displayName, email) values (?,?,?,?,?,?)'
+//         conn.query(sql, [newUser.authId, newUser.username, hash, salt, newUser.displayName, newUser.email], function(err, results){
+//             if(err){
+//                 if(err.errno === 1062){
+//                     res.send({code:1, msg:'alreay exist'});
+//                 } else {
+//                     console.log(err);
+//                     res.status(500).send('Internal Server Error');
+//                 }
+//             } else {
+//                 console.log(results);
+//                 req.login(newUser, function(err) {
+//                     if (err) {
+//                         return next(err); 
+//                     } else {
+//                         res.send({code:0, msg:'succ', result:results});
+//                     }
+//                 });
+//             }
+//         })
+//     })
+// })
 
   router.get('/temp', function(req, res){
     res.send(req.user);

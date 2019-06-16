@@ -31,7 +31,7 @@
           <td> <input name="value" v-model="user[key]"/> </td>
         </tr>
       </table>
-      {{ user }}
+      
       <button v-on:click="register">가입하기</button>
     </div>
 
@@ -104,21 +104,45 @@
         this.registerForm = true;
 
       },
-      register(){
-        this.$http.post('/api/login/register', {user: this.user})
-        .then((response) => {
-          // console.log(response);
-          alert(response.data.msg);
-          if (response.data.code === 0) {
-            location.reload();
+      // register(){
+      //   this.$http.post('/api/login/register', {user: this.user})
+      //   .then((response) => {
+      //     // console.log(response);
+      //     alert(response.data.msg);
+      //     if (response.data.code === 0) {
+      //       location.reload();
             
-          } else if (response.data.code === 1) {
-            //already exist
-          }
-          // this.registerForm = false;
-          // location.reload();
+      //     } else if (response.data.code === 1) {
+      //       //already exist
+      //     }
+      //     // this.registerForm = false;
+      //     // location.reload();
+      //   });
+      // },
+
+      register: function() {
+        this.$http.post(`/api/users`, {user: this.user})
+        .then((response) => {
+          // console.log('111111', response);
+          this.$http.post(`/api/login`, {username:response.data.username , password:response.data.password })
+          .then((response) => {
+            // console.log('222222', response);
+            location.reload();
+          })
+          // alert(response);
+          
+
+          // if (response.data.code === 0) {
+          //   location.reload();
+            
+          // } else if (response.data.code === 1) {
+          //   //already exist
+          // }
+          // // this.registerForm = false;
+          // // location.reload();
         });
       },
+
       facebooklogin(){
         this.$http.get(`/api/login/facebook`)
         .then((response) => {

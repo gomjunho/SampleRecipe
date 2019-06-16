@@ -87,12 +87,19 @@
 //          console.log('put test');
       },
       postapi: function(user) {
-        var id = user.id;
-        this.$http.post(`/api/users/${id}`, {user: user})
+        this.$http.post(`/api/users`, {user: user})
         .then((response) => {
           location.reload();
         })
       },
+      /** temp!!!! **/
+      // postapi: function(user) {
+      //   var id = user.id;
+      //   this.$http.post(`/api/users/${id}`, {user: user})
+      //   .then((response) => {
+      //     location.reload();
+      //   })
+      // },
       deleteapi: function(id) {
         this.$http.delete(`/api/users/${id}`
       )

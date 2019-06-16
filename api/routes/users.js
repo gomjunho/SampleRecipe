@@ -1,10 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
+var pbkdf2 = require('pbkdf2-password');
+
+// var MySQLStore = require('express-mysql-session')(session);
+
 // var session = require('express-session');
 // var MySQLStore = require('express-mysql-session')(session);
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+
+
+var hasher = pbkdf2();
 
 var conn = mysql.createConnection({
   host     : 'localhost',
@@ -77,25 +84,75 @@ router.put('/:id', function (req, res) {
 });
 
 
-router.post('/:id', function (req, res) {
+router.post('/', function (req, res) {
 
-  var user = req.body.user;
-  var sql = 'INSERT INTO users (id, authId, username, password, salt, displayName, email ) VALUES (?,?,?,?,?,?,?)';
-
-  conn.query(sql,
-           [user.id, user.authId, user.username, user.password, user.salt, user.displayName, user.email],
-           function(err, results){
-    if(err){
-      console.log('err: ' + err);
-      res.send(err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      //  res.render('view', {topics:topics, topic:topic[0]});
-      res.send(results);
-      console.log(results);
-    }
-  });
+  // var user = req.body.user;
+  console.log(req.body.user);
+  var newUser = {
+    authId : 'local:'+req.body.user.authId,
+    username : req.body.user.username,
+    password : req.body.user.password,
+    displayName : req.body.user.displayName,
+    email : req.body.user.email
+  }
+  hasher({password: newUser.password}, function(err, pass, salt, hash){
+    var sql = 'INSERT INTO users (authId, username, password, salt, displayName, email) values (?,?,?,?,?,?)'
+    conn.query(sql, [newUser.authId, newUser.username, hash, salt, newUser.displayName, newUser.email], function(err, results){
+        if(err){
+            if(err.errno === 1062){
+                res.send({code:1, msg:'alreay exist'});
+            } else {
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            }
+        } else {
+            console.log(results);
+            res.send(newUser);
+            /** 
+            req.login(newUser, function(err) {
+                if (err) {
+                    return next(err); 
+                } else {
+                    res.send({code:0, msg:'succ', result:results});
+                }
+            });
+*/
+        }
+    })
+  })
 });
+
+
+// var newUser = {
+//   authId : 'local:'+req.body.user.authId,
+//   username : req.body.user.username,
+//   password : req.body.user.password,
+//   displayName : req.body.user.displayName,
+//   email : req.body.user.email
+// }
+// hasher({password: newUser.password}, function(err, pass, salt, hash){
+//   var sql = 'INSERT INTO users (authId, username, password, salt, displayName, email) values (?,?,?,?,?,?)'
+//   conn.query(sql, [newUser.authId, newUser.username, hash, salt, newUser.displayName, newUser.email], function(err, results){
+//       if(err){
+//           if(err.errno === 1062){
+//               res.send({code:1, msg:'alreay exist'});
+//           } else {
+//               console.log(err);
+//               res.status(500).send('Internal Server Error');
+//           }
+//       } else {
+//           console.log(results);
+//           req.login(newUser, function(err) {
+//               if (err) {
+//                   return next(err); 
+//               } else {
+//                   res.send({code:0, msg:'succ', result:results});
+//               }
+//           });
+//       }
+//   })
+// })
+
 
 router.delete('/:id', function (req, res) {
 
