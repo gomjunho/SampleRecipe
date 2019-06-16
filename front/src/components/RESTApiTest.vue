@@ -81,7 +81,15 @@
         .then((response) => {
         // this.$router.push({name:'users'})
           // this.apires = response;
-          location.reload();
+          if(response.data.code === 0) {
+            console.log(response.data.msg);
+
+          } else if (response.data.code === 1) {
+            console.log(response.data.msg);
+            // location.reload();
+
+          }
+          // location.reload();
 //          console.log("response: "+response);
         })
 //          console.log('put test');

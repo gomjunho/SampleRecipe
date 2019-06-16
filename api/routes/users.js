@@ -68,19 +68,77 @@ router.put('/:id', function (req, res) {
 
   var id = req.params.id;
   var user = req.body.user;
-  var sql = 'UPDATE users SET authId=?, username=?, password=?, salt=?, displayName=?, email=? WHERE id=?';
 
-  conn.query(sql,
-           [user.authId, user.username, user.password, user.salt, user.displayName, user.email, id],
-           function(err, results){
-    if(err){
-      console.log('err: ' + err);
+  var selectSQL = 'SELECT * FROM USERS WHERE id = ?';
+  conn.query(selectSQL, [id], function(err, selectresults){
+    if(err) {
+      console.log(err);
       res.status(500).send('Internal Server Error');
+
     } else {
-      res.send(results);
-      console.log(results);
+      var queryuser = selectresults[0];
+      hasher({password: user.password, salt: queryuser.salt}, function(err, pass, salt, hash){
+        
+        console.log("user.password", user.password);
+        console.log("hash", hash);
+        console.log("queryuser.password", queryuser.password);
+
+        // 비밀번호 확인
+        if (hash === queryuser.password) {
+          hasher({password: user.password}, function(err, pass, salt, hash){
+            var updateSQL = 'UPDATE users SET authId=?, username=?, password=?, salt=?, displayName=?, email=? WHERE id=?';
+            conn.query(updateSQL, [user.authId, user.username, hash, salt, user.displayName, user.email, id], function(err, updateresults){
+
+              if(err){
+                console.log('err: ' + err);
+                res.status(500).send('Internal Server Error');
+
+              } else {
+                res.send({code:1, msg:updateresults});
+                console.log(updateresults);
+              }
+            });
+          })
+
+        } else {
+          res.send({code:0, msg:'password error'});
+        }
+      })
+
+
+      /**
+       hasher({password:pwd, salt: user.salt}, function(err, pass, salt, hash){
+                        if(hash === user.password){
+                            console.log('ok',user);
+                            done(null, user, {message:'correct'});
+                        } else {
+                            console.log('fail',user);
+                            done(null, false, {message:'no match password'});
+                        }
+                    })
+       * 
+       */
+      // if(queryuser.password = hash)
     }
-  });
+  })
+
+//  hasher({password: user.password}, function(err, pass, salt, hash){
+//   conn.query(sql, [user.authId, user.username, hash, salt, user.displayName, user.email, id], function(err, results){
+//     if(err){
+//       console.log('err: ' + err);
+//       res.status(500).send('Internal Server Error');
+//     } else {
+//       res.send(results);
+//       console.log(results);
+//     }
+//   });
+// })
+
+
+
+
+
+  
 });
 
 
