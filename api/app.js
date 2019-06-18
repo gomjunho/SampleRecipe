@@ -7,6 +7,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var postRouter = require('./routes/post');
 var imagesRouter = require('./routes/images');
 var loginRouter = require('./routes/login');
 var diaryRouter = require('./routes/diary');
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/post', postRouter);
 app.use('/api/images', imagesRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/diary', diaryRouter);
