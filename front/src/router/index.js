@@ -10,6 +10,9 @@ import RESTApiTest from '../components/RESTApiTest'
 import LoginTest from '../components/LoginTest'
 import ImageUploadTest from '../components/ImageUploadTest'
 
+import Post from '../components/Post'
+import PostDetail from '../components/PostDetail'
+
 // import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
@@ -58,6 +61,14 @@ export default new Router({
       path: '/examples/images',
       name: 'images',
       component: ImageUploadTest
+    },{
+      path: '/examples/post',
+      name: 'post',
+      component: Post
+    },{
+      path: '/examples/post/:id',
+      name: 'postdetail',
+      component: PostDetail
     }
   ]
 })
