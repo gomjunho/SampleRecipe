@@ -40,7 +40,7 @@ router.get('/', function (req, res) {
     // var page = req.query.page;
     
     // all posts
-    var sql = 'SELECT * FROM post';
+    var sql = 'SELECT id, title, user, hit, created FROM post';
     conn.query(sql, function(err, results){
         if(err){
             console.log(err);
@@ -54,31 +54,38 @@ router.get('/', function (req, res) {
 router.get('/:id', function (req, res) {
     var id = req.params.id;
     var sql = 'SELECT * FROM post WHERE id=?';
-    conn.query(sql, [id], function(err, results){
+    conn.query(sql, [id], function(err, selectPostResults){
         if(err){
             console.log(err);
             res.status(500).send('Internal Server Error');
         } else {
-            console.log(results);
-            res.send(results);
+            console.log(selectPostResults[0].hit);
+            
+            var hit = parseInt(selectPostResults[0].hit) + 1;
+
+            var sql = 'UPDATE post SET hit=? WHERE id=?';
+            conn.query(sql, [hit, id], function(err, hitUpdateResults){
+                if(err){
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    selectPostResults[0].hit = hit;
+                    console.log(selectPostResults);
+                    res.send(selectPostResults);
+                }
+            });
         }
     });
 });
 
 
 router.put('/:id', function (req, res) {
-
     var id = req.params.id;
     var date = new Date();
     var title = req.body.title;
     var description = req.body.description;
 
-    console.log('title' + title);
-    console.log('description' + description);
-
     var sql = 'UPDATE post SET updated=?, title=?, description=? WHERE id=?';
-
-    // UPDATE post SET title='ti33', description='de3333' WHERE id=3
 
     conn.query(sql, [date, title, description, id], function(err, results){
         if(err){
@@ -91,26 +98,19 @@ router.put('/:id', function (req, res) {
     });
 });
 
-
 // update에 빈 문자열을 넣고 있는데 NULL 로 인식 하는지 확인 필요
 
 router.post('/', function (req, res) {
-    console.log('post create api call!!');
-    
     var created = new Date();
-    var updated = '';
     var user = req.body.user;
     var title = req.body.title;
     var description = req.body.description;
     var hit = 0;
     var recommend = 0;
 
-    console.log(created.valueOf());
-    // res.send(create);
+    var sql = 'INSERT INTO post (created, user, title, description, hit, recommend) VALUES (?,?,?,?,?,?)';
 
-    var sql = 'INSERT INTO post (created, updated, user, title, description, hit, recommend) VALUES (?,?,?,?,?,?,?)';
-
-    conn.query(sql, [created, updated, user, title, description, hit, recommend], function(err, results){
+    conn.query(sql, [created, user, title, description, hit, recommend], function(err, results){
         if(err){
                 console.log(err);
                 res.status(500).send('Internal Server Error');
@@ -122,8 +122,6 @@ router.post('/', function (req, res) {
 });
 
 router.delete('/:id', function (req, res) {
-    console.log('post delete api call!!');
-
     var id = req.params.id;
     var sql = 'DELETE FROM post where id=?';
 
