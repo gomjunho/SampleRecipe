@@ -30,9 +30,10 @@
         
         <div class="bottom">
         <hr>
-            <router-link to="/examples/post" tag="button">Go to PostList</router-link>
+            <router-link to="/examples/post" tag="button">글목록</router-link>
+            <button v-on:click="updatePost()"> 수정 </button>
+            <button v-on:click="deletePost()"> 삭제 </button>
         </div>
-
 
     </div>
 </template>
@@ -52,6 +53,19 @@
             return {
                 post:{},
                 id:0
+            }
+        },
+        methods: {
+            updatePost: function() {
+                var id = this.$route.params.id;
+            },
+            deletePost: function() {
+                var id = this.$route.params.id;
+                this.$http.delete(`/api/post/${id}`)
+                .then((response) => {
+                    console.log(response.data[0]);
+                    this.$router.push({ name: 'post'})
+                });
             }
         }
     }

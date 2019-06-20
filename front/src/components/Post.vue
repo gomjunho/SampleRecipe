@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div align="center" >
         <h1> Post List </h1>
-        <table align="center" class = "posts">
+        <table class = "posts">
             <thead>
                 <tr>
                     <th v-for="(value,key) in column" > {{ value }} </th>
@@ -14,6 +14,7 @@
                 </tr>
             </tbody>
         </table>
+        <router-link to="/examples/postform" tag="button">글쓰기</router-link>
     </div>
 </template>
 
@@ -24,10 +25,9 @@ export default {
         .then((response) => {
             console.log(response.data);
             this.posts = response.data;
-
-            var post = this.posts[0];
+            // var post = this.posts[0];
             
-            for (var key in post) {
+            for (var key in this.posts[0]) {
                 this.column.push(key);
             }
         });
@@ -58,7 +58,7 @@ export default {
     table.posts th {
         width: 155px;
         padding: 10px;
-        /*font-weight: bold; */
+        font-weight: bold;
         vertical-align: center;
         color: #fff;
         background: #ce4869 ;

@@ -12,6 +12,7 @@ import ImageUploadTest from '../components/ImageUploadTest'
 
 import Post from '../components/Post'
 import PostDetail from '../components/PostDetail'
+import PostForm from '../components/PostForm'
 
 // import HelloWorld from '@/components/HelloWorld'
 
@@ -69,6 +70,10 @@ export default new Router({
       path: '/examples/post/:id',
       name: 'postdetail',
       component: PostDetail
+    },{
+      path: '/examples/PostForm',
+      name: 'postform',
+      component: PostForm
     }
   ]
 })
