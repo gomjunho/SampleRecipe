@@ -40,7 +40,7 @@ router.get('/', function (req, res) {
     // var page = req.query.page;
     
     // all posts
-    var sql = 'SELECT id, title, user, hit, created FROM post';
+    var sql = 'SELECT p.id, p.title, u.displayName, p.hit, p.created FROM post p, users u WHERE p.user = u.id';
     conn.query(sql, function(err, results){
         if(err){
             console.log(err);
@@ -59,21 +59,25 @@ router.get('/:id', function (req, res) {
             console.log(err);
             res.status(500).send('Internal Server Error');
         } else {
-            console.log(selectPostResults[0].hit);
+            if(selectPostResults.length > 0){
+                console.log(selectPostResults[0].hit);
             
-            var hit = parseInt(selectPostResults[0].hit) + 1;
-
-            var sql = 'UPDATE post SET hit=? WHERE id=?';
-            conn.query(sql, [hit, id], function(err, hitUpdateResults){
-                if(err){
-                    console.log(err);
-                    res.status(500).send('Internal Server Error');
-                } else {
-                    selectPostResults[0].hit = hit;
-                    console.log(selectPostResults);
-                    res.send(selectPostResults);
-                }
-            });
+                var hit = parseInt(selectPostResults[0].hit) + 1;
+    
+                var sql = 'UPDATE post SET hit=? WHERE id=?';
+                conn.query(sql, [hit, id], function(err, hitUpdateResults){
+                    if(err){
+                        console.log(err);
+                        res.status(500).send('Internal Server Error');
+                    } else {
+                        selectPostResults[0].hit = hit;
+                        console.log(selectPostResults);
+                        res.send(selectPostResults);
+                    }
+                });
+            } else {
+                res.send({code:01, msg:'there is no post'});
+            }
         }
     });
 });
@@ -112,12 +116,15 @@ router.post('/', function (req, res) {
 
     conn.query(sql, [created, user, title, description, hit, recommend], function(err, results){
         if(err){
-                console.log(err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                console.log(results);
-                res.send(results);
+            if(err.errno == 1366){
+                console.log("data type err");
             }
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(results);
+            res.send(results);
+        }
     });
 });
 
