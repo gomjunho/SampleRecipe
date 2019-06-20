@@ -22,6 +22,11 @@
       </div>
 <br>
       <div>
+        <h3> Notice Board  </h3>
+        <router-link to="/examples/post" tag="button">Go to Notice Board test</router-link>
+      </div>
+<br>
+      <div>
         <h3> Image Upload </h3>
         <router-link to="/examples/images" tag="button">Go to image upload test</router-link>
       </div>
