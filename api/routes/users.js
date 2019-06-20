@@ -17,7 +17,7 @@ var conn = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'lljh0802@W',
-  database : 'realestate'
+  database : 'SR'
 });
 
 conn.connect();
