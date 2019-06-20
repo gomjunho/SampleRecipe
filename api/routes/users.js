@@ -1,3 +1,18 @@
+/**
+<users data structure>
+
+CREATE TABLE users (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  authId varchar(50) NOT NULL,
+  username varchar(30),
+  password varchar(255),
+  salt varchar(255),
+  displayName varchar(50),
+  email varchar(50) NOT NULL,
+  PRIMARY KEY (id, authId)
+);
+ */
+
 var express = require('express');
 var router = express.Router();
 
