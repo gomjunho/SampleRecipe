@@ -13,6 +13,7 @@ import ImageUploadTest from '../components/ImageUploadTest'
 import Post from '../components/Post'
 import PostDetail from '../components/PostDetail'
 import PostForm from '../components/PostForm'
+import PostFormUpdate from '../components/PostForm'
 
 // import HelloWorld from '@/components/HelloWorld'
 
@@ -74,6 +75,10 @@ export default new Router({
       path: '/examples/PostForm',
       name: 'postform',
       component: PostForm
+    },{
+      path: '/examples/PostForm/:id',
+      name: 'postformupdate',
+      component: PostFormUpdate
     }
   ]
 })
