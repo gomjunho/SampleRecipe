@@ -111,7 +111,7 @@ router.get('/:id/comment', function (req, res) {
 
     console.log('comment get',id);
 
-    var sql = 'SELECT C.id, C.root, C.re, U.displayName, C.created, C.updated, C.comment FROM comment C, users U WHERE C.user=U.id and C.root=?';
+    var sql = 'SELECT C.id, C.root, C.re, C.user, U.displayName, C.created, C.updated, C.comment FROM comment C, users U WHERE C.user=U.id and C.root=?';
     conn.query(sql, [id], function(err, selectPostResults){
         if(err){
             console.log(err);

@@ -1,6 +1,6 @@
 <template>
     <div align="center" >
-        <h1> Post List </h1>
+        <h1> Notice Board </h1>
         <table class = "posts">
             <thead>
                 <tr>
@@ -14,7 +14,9 @@
                 </tr>
             </tbody>
         </table>
+        <hr>
         <router-link to="/examples/postform" tag="button">글쓰기</router-link>
+        <router-link to="/examples" tag="button">Go to Examples</router-link>
     </div>
 </template>
 
@@ -23,9 +25,7 @@ export default {
     created: function() {
         this.$http.get('/api/post')
         .then((response) => {
-            console.log(response.data);
             this.posts = response.data;
-            // var post = this.posts[0];
             
             for (var key in this.posts[0]) {
                 this.column.push(key);
@@ -34,6 +34,7 @@ export default {
     },
     data: function() {
         return {
+            session:{},
             posts:[],
             column:[]
         }
