@@ -116,6 +116,7 @@
         methods: {
             updatePost: function() {
                 var id = this.$route.params.id;
+                this.$router.push({ name: 'postformupdate', params: { id: id }})
             },
             deletePost: function() {
                 var id = this.$route.params.id;
