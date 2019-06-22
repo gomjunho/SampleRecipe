@@ -23,13 +23,14 @@ CREATE TABLE post (
 
 CREATE TABLE comment (
     id INT(11) unsigned NOT NULL AUTO_INCREMENT,
-    root INT(11),
+    root bigint(20) unsigned NOT NULL,
     re INT(1),
     user BIGINT(11),
     created DATETIME,
     updated DATETIME,
     comment mediumtext,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY(root) REFERENCES post(id) ON DELETE CASCADE;
 )
 
 // root: 원글 ID
