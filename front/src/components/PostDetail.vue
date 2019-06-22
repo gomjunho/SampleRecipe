@@ -32,6 +32,7 @@
         <hr>
             <router-link to="/examples/post" tag="button">글목록</router-link>
             <div v-if="authorized == true">
+                <button v-on:click="recommendPost()"> 추천 </button>
                 <button v-on:click="updatePost()"> 수정 </button>
                 <button v-on:click="deletePost()"> 삭제 </button>
             </div>
@@ -143,6 +144,14 @@
                     
 
                 })
+            },
+            recommendPost: function() {
+                var pid = this.$route.params.id;
+                console.log('recommendPost call!');
+                this.$http.get(`/api/post/${pid}/recommend`)
+                .then((response) => {
+                    location.reload();
+                });
             },
             createComment: function() {
                 this.$http.get(`/api/login/session`)

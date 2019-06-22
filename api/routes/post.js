@@ -191,6 +191,38 @@ router.put('/:id', function (req, res) {
     });
 });
 
+router.get('/:id/recommend', function (req, res) {
+    var id = req.params.id;
+
+    var selectSQL = 'SELECT recommend FROM post WHERE id=?';
+
+    conn.query(selectSQL, [id], function(err, selectedResults){
+        if(err){
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            var newRecommend = selectedResults[0].recommend+1;
+
+            var updateSQL = 'UPDATE post SET recommend=? WHERE id=?';
+            conn.query(updateSQL, [newRecommend, id], function(err, updatedResults){
+                if(err){
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    console.log(updatedResults);
+                    res.send(updatedResults);
+                }
+            });
+
+        }
+
+    })
+
+
+
+    
+});
+
 // update에 빈 문자열을 넣고 있는데 NULL 로 인식 하는지 확인 필요
 
 router.post('/', function (req, res) {
