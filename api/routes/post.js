@@ -205,8 +205,21 @@ router.get('/:id/recommend', function (req, res) {
             console.log(err);
             res.status(500).send('Internal Server Error');
         } else {
-            console.log(updatedResults);
-            res.send(updatedResults);
+            console.log("updatedResults: ",updatedResults);
+            // res.send(updatedResults);
+            var selectSQL = 'SELECT recommend FROM post WHERE id=?';
+            conn.query(selectSQL, [id], function(err, selectedResult) {
+                if(err){
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+
+                } else {
+                    console.log("selectedResult: ", selectedResult);
+                    res.send(selectedResult);
+                }
+            })
+
+
         }
     });
     /**

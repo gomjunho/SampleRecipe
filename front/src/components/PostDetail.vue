@@ -163,7 +163,8 @@
                 console.log('recommendPost call!');
                 this.$http.get(`/api/post/${pid}/recommend`)
                 .then((response) => {
-                    location.reload();
+                    console.log('recommend!!!', response.data[0].recommend);
+                    this.post.recommend = response.data[0].recommend;
                 });
             },
             createComment: function() {
