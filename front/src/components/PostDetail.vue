@@ -48,7 +48,7 @@
             <div v-for="comment in comments" class="comments" v-bind:id="comment.id+'test'">
 
                 <div>
-                    <div v-if="updateCommentTF === false">
+                    <div v-if="updateCommentId != comment.id">
                         {{comment.comment}}
 
                         <div class="created">
@@ -63,14 +63,18 @@
                         <input v-model="comment.comment"></input>
                     </div>
 
-                    <div v-if="updateCommentTF === false">
-                        <button v-on:click="updateTF()"> 수정 </button>
-                        <button v-on:click="deleteComment(comment)"> 삭제 </button>
+
+                    <div v-if="comment.user == user.id">
+                        <div v-if="updateCommentId != comment.id">
+                            <button v-on:click="updateTF(comment)"> 수정 </button>
+                            <button v-on:click="deleteComment(comment)"> 삭제 </button>
+                        </div>
+                        <div v-else>
+                            <button v-on:click="updateComment(comment)"> 수정 완료 </button>
+                            <button v-on:click="updateTF(comment)"> 수정 취소 </button>
+                        </div>
                     </div>
-                    <div v-else>
-                        <button v-on:click="updateComment(comment)"> 수정 완료 </button>
-                        <button v-on:click="updateTF()"> 수정 취소 </button>
-                    </div>
+                    
                     <hr>
                 </div>
             </div>
@@ -118,6 +122,7 @@
             .then((response) => {
                 this.comments = response.data;
             });
+
         },
         data: function() {
             return {
@@ -127,7 +132,7 @@
                 comments:[],
                 id:0,
                 authorized:false,
-                updateCommentTF:false
+                updateCommentId:0
             }
         },
         methods: {
@@ -187,11 +192,13 @@
                     }
                 })
             },
-            updateTF: function() {
-                if (this.updateCommentTF === true){
-                    this.updateCommentTF = false;
+            updateTF: function(comment) {
+                console.log(comment);
+                
+                if (this.updateCommentId == 0){
+                    this.updateCommentId = comment.id;
                 } else {
-                    this.updateCommentTF = true;
+                    this.updateCommentId = 0;
                 }
             },
             deleteComment: function(comment) {
@@ -214,14 +221,17 @@
                     alert('사용자 로그인이 필요합니다.');
                 }
             },
-            updateComment: function() {
+            updateComment: function(comment) {
                 var pid = this.$route.params.id;
+                var cid = comment.id;
 
                 var re = 0;
                 var user = this.user;
 
-                this.$http.put(`/api/post/${pid}/comment/${cid}`, {root: id, re: re, user: user, comment:this.newComment})
+                this.$http.put(`/api/post/${pid}/comment/${cid}`, {re: comment.re, user: user, comment:comment.comment})
                 .then((response) => {
+                    this.updateCommentId = 0;
+
                 });
             },
             cancleupdate: function() {
