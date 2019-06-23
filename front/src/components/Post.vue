@@ -10,7 +10,7 @@
 
             <tbody>
                 <tr v-for="post in posts" v-on:click="clickPost(post)">
-                    <td v-for="(value,key) in column" > {{ post[value] }} </td>
+                    <td v-for="key in column" > {{ post[key] }} </td>
                 </tr>
             </tbody>
         </table>
@@ -25,18 +25,34 @@ export default {
     created: function() {
         this.$http.get('/api/post')
         .then((response) => {
-            this.posts = response.data;
-            
-            for (var key in this.posts[0]) {
-                this.column.push(key);
+            var posts = response.data;
+            var temp = "";
+
+            for(var index in posts){
+                console.log(posts[index]);
+                var today = new Date();
+                var created = new Date(posts[index].created);
+                // console.log("today: ", today);
+                // console.log("created: ", created);
+                if (created.getDate() == today.getDate() &&
+                    created.getMonth() == today.getMonth() &&
+                    created.getYear() == today.getYear()) {
+                    posts[index].created = created.getHours()+":"+created.getMinutes() +":"+ created.getSeconds();
+                } else {
+                    posts[index].created = created.getFullYear()+"-"+created.getMonth() +"-"+ created.getDate();
+                }
             }
+
+            this.posts = posts;
+
+            console.log(this.posts);
         });
     },
     data: function() {
         return {
             session:{},
             posts:[],
-            column:[]
+            column:["id", "title", "displayName", "hit", "created"]
         }
     },
     methods:{
