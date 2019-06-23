@@ -85,21 +85,34 @@
         created: function() {
             var id = this.$route.params.id;
 
-            this.$http.get(`/api/post/${id}`)
+            // After hit update, post select
+            this.$http.get(`/api/post/${id}/hit`)
             .then((response) => {
-                this.post = response.data[0];
-
-                this.$http.get(`/api/login/session`)
+                
+                this.$http.get(`/api/post/${id}`)
                 .then((response) => {
-                    this.user = response.data;
-                    
-                    if(this.user.id == this.post.user) {
-                        this.authorized = true;
+                    if (response.data.code == '00') {
+
+                        this.post = response.data.data[0];
+
+                        // Session user get for post writer confirm
+                        this.$http.get(`/api/login/session`)
+                        .then((response) => {
+                            this.user = response.data;
+                            
+                            if(this.user.id == this.post.user) {
+                                this.authorized = true;
+                            } else {
+                                this.authorized = false;
+                            }
+                        })
                     } else {
-                        this.authorized = false;
+                        console.log(response.data);
+                        alert(response.data.msg);
                     }
-                })
-            });
+                });
+            })
+
 
             this.$http.get(`/api/post/${id}/comment`)
             .then((response) => {

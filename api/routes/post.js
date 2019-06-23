@@ -83,29 +83,34 @@ router.get('/:id', function (req, res) {
         if(err){
             console.log(err);
             res.status(500).send('Internal Server Error');
+
         } else {
             if(selectPostResults.length > 0){
-                console.log(selectPostResults[0].hit);
-            
-                var hit = parseInt(selectPostResults[0].hit) + 1;
-    
-                var sql = 'UPDATE post SET hit=? WHERE id=?';
-                conn.query(sql, [hit, id], function(err, hitUpdateResults){
-                    if(err){
-                        console.log(err);
-                        res.status(500).send('Internal Server Error');
-                    } else {
-                        selectPostResults[0].hit = hit;
-                        console.log(selectPostResults);
-                        res.send(selectPostResults);
-                    }
-                });
+                res.send({code:00, msg:'select post success', data: selectPostResults});
+
             } else {
                 res.send({code:01, msg:'there is no post'});
             }
         }
     });
 });
+
+router.get('/:id/hit', function (req, res) {
+    var id = req.params.id;
+    var sql = 'UPDATE post SET hit=hit+1 WHERE id=?';
+    conn.query(sql, [id], function(err, hitUpdateResults){
+        if(err){
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(hitUpdateResults);
+            res.send(hitUpdateResults);
+        }
+    });
+
+});
+
+
 
 router.get('/:id/comment', function (req, res) {
     var id = req.params.id;
@@ -194,6 +199,17 @@ router.put('/:id', function (req, res) {
 router.get('/:id/recommend', function (req, res) {
     var id = req.params.id;
 
+    var updateSQL = 'UPDATE post SET recommend=recommend+1 WHERE id=?';
+    conn.query(updateSQL, [id], function(err, updatedResults){
+        if(err){
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(updatedResults);
+            res.send(updatedResults);
+        }
+    });
+    /**
     var selectSQL = 'SELECT recommend FROM post WHERE id=?';
 
     conn.query(selectSQL, [id], function(err, selectedResults){
@@ -217,10 +233,7 @@ router.get('/:id/recommend', function (req, res) {
         }
 
     })
-
-
-
-    
+     */
 });
 
 // update에 빈 문자열을 넣고 있는데 NULL 로 인식 하는지 확인 필요
