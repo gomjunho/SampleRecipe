@@ -7,9 +7,13 @@
         <router-link to="/test" tag="button">go to test</router-link>
       </div
       -->
-        <h1>Example Page</h1>
+      <h1>Example Page</h1>
       <div>
         <router-link to="/examples" tag="button">go to examples</router-link>
+      </div>
+      <h1>Developer Diary</h1>
+      <div>
+        <router-link to="/diary" tag="button">Diary Application</router-link>
       </div>
   </div>
 </template>

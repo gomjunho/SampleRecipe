@@ -10,6 +10,8 @@ import RESTApiTest from '../components/RESTApiTest'
 import LoginTest from '../components/LoginTest'
 import ImageUploadTest from '../components/ImageUploadTest'
 
+import Diary from '../components/Diary'
+
 import Post from '../components/Post'
 import PostDetail from '../components/PostDetail'
 import PostForm from '../components/PostForm'
@@ -51,6 +53,10 @@ export default new Router({
       path: '/users/:id',
       name: 'userdetail',
       component: UserDetail
+    },{
+      path: '/diary',
+      name: 'diary',
+      component: Diary
     },{
       path: '/examples/rest',
       name: 'rest',
