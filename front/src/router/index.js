@@ -12,6 +12,8 @@ import ImageUploadTest from '../components/ImageUploadTest'
 
 import Diary from '../components/Diary'
 
+import Interview from '../components/Interview'
+
 import Post from '../components/Post'
 import PostDetail from '../components/PostDetail'
 import PostForm from '../components/PostForm'
@@ -57,6 +59,10 @@ export default new Router({
       path: '/diary',
       name: 'diary',
       component: Diary
+    },{
+      path: '/interview',
+      name: 'interview',
+      component: Interview
     },{
       path: '/examples/rest',
       name: 'rest',

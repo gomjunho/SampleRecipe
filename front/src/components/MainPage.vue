@@ -15,6 +15,10 @@
       <div>
         <router-link to="/diary" tag="button">Diary Application</router-link>
       </div>
+      <h1>Interview</h1>
+      <div>
+        <router-link to="/interview" tag="button">Interview</router-link>
+      </div>
   </div>
 </template>
 
