@@ -14,6 +14,8 @@ import Diary from '../components/Diary'
 
 import Interview from '../components/Interview'
 
+import Algorithm from '../components/Algorithm'
+
 import Post from '../components/Post'
 import PostDetail from '../components/PostDetail'
 import PostForm from '../components/PostForm'
@@ -63,6 +65,10 @@ export default new Router({
       path: '/interview',
       name: 'interview',
       component: Interview
+    },{
+      path: '/algorithm',
+      name: 'algorithm',
+      component: Algorithm
     },{
       path: '/examples/rest',
       name: 'rest',

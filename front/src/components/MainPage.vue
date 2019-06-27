@@ -19,6 +19,11 @@
       <div>
         <router-link to="/interview" tag="button">Interview</router-link>
       </div>
+      <h1>Algorithm</h1>
+      <div>
+        <router-link to="/algorithm" tag="button">Algorithm</router-link>
+      </div>
+      
   </div>
 </template>
 
