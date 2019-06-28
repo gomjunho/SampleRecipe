@@ -8,7 +8,7 @@
         <input type="checkbox" v-bind:id='user.id' v-bind:value='user.username' >
     -->
         <li>
-              <button v-on:click="userclick(user)"> {{ user.username }} </button>
+              <v-btn v-on:click="userclick(user)"> {{ user.username }} </v-btn>
         </li>
       </div>
     </ol>
@@ -22,14 +22,14 @@
       </table>
     </div>
     <br>
-    <button v-on:click="getapi(user.id)"> GET </button>
-    <button v-on:click="postapi(user)"> POST </button>
-    <button v-on:click="putapi(user)"> PUT </button>
-    <button v-on:click="deleteapi(user.id)"> DELETE </button>
+    <v-btn small v-on:click="getapi(user.id)"> GET </v-btn>
+    <v-btn small v-on:click="postapi(user)"> POST </v-btn>
+    <v-btn small  v-on:click="putapi(user)"> PUT </v-btn>
+    <v-btn small  v-on:click="deleteapi(user.id)"> DELETE </v-btn>
     <br>
     <hr>
-    <router-link to="/examples" tag="button">Go to Examples</router-link>
-    <router-link to="/" tag="button">Go to Main</router-link>
+    <router-link to="/examples" tag="v-btn">Go to Examples</router-link>
+    <router-link to="/" tag="v-btn">Go to Main</router-link>
   </div>
 </template>
 
