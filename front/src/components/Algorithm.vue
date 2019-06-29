@@ -53,6 +53,14 @@
   </div>
   <div style="display:inline;">
     {{selected}}<br><br>
+    
+    {{answer.id}}
+    {{answer.question_id}}
+    {{answer.concept}}
+    {{answer.answer}}
+    {{answer.reference}}
+  </div>
+  <div>
     {{data1}}<br><br>
     {{data2}}<br><br>
     {{data3}}
@@ -82,7 +90,16 @@ export default {
           data3:`category (id, name)
                 question (id, category_id, question title, question desc, reference(질문 참조 사이트))
                 answer (id, question_id, concept(어떤식으로 풀려는건지), answer(풀이 코드), reference(답변 참조 사이트 or 책))`,
-          selected:''
+          selected:'',
+          answer: {
+            id:1,
+            created:'',
+            updated:'',
+            question_id:1,
+            concept:'DFS, BFS',
+            answer:'code',
+            reference:'www.algorithm.com'
+          }
         }
     },
     methods:{
