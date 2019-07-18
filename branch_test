@@ -7,3 +7,5 @@ rebase test
 branch rebase test
 
 branch commit test
+
+bug fix in branch
